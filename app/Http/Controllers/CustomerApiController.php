@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerApiController extends Controller
 {
@@ -34,10 +35,12 @@ class CustomerApiController extends Controller
      */
     public function store(Request $request)
     {
+        $password = Hash::make($request->password);
+      
         $customer = new Customer();
         $customer->name = $request->name;
         $customer->email = $request->email;
-        $customer->password = $request->password;
+        $customer->password = $password;
         $customer->phone = $request->phone;
         $customer->adress = $request->adress;
         $customer->role = $request->role;
