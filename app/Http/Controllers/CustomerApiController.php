@@ -16,7 +16,7 @@ class CustomerApiController extends Controller
         $customers = Customer::all();
 
         return response()->json([
-            'customers'=> $customers,
+            'customers' => $customers,
             'message'  => 'success',
             'code'     => 200
         ]);
@@ -36,7 +36,7 @@ class CustomerApiController extends Controller
     public function store(Request $request)
     {
         $password = Hash::make($request->password);
-      
+
         $customer = new Customer();
         $customer->name = $request->name;
         $customer->email = $request->email;
@@ -46,9 +46,12 @@ class CustomerApiController extends Controller
         $customer->role = $request->role;
         $customer->date_of_birth = $request->date_of_birth;
         $customer->save();
-        
+
         return response()->json([
             'message' => 'Customer is successfully stored',
+            'code'     => 200,
+            'newcustomer' => $customer
+
         ]);
     }
 
@@ -82,5 +85,31 @@ class CustomerApiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function login(Request $request)
+    {
+
+        $customer = Customer::where('email', $request->email)->first();
+
+        if ($customer) {
+            if (Hash::check($request->password, $customer->password)) {
+                return response()->json([
+                    'message' => 'customer is successfully logged in.',
+                    'login customer' => $customer,
+
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'customer password is incorrect.',
+                    'code'  => 401
+                ], 401);
+            }
+        } else {
+            return response()->json([
+                'message' => 'customer is not found.',
+                'code'  => 404
+            ], 404);
+        }
     }
 }

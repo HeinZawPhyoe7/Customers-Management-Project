@@ -10,4 +10,5 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/customer',[CustomerApiController::class,'index']);
 Route::post('/customer',[CustomerApiController::class,'store']);
+Route::post('/customer/login',[CustomerApiController::class,'login']);
 // Route::apiResource('/customer',CustomerApiController::class);
